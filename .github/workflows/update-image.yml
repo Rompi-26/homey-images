@@ -25,6 +25,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add state.txt
-          git commit -m "Update to image ${{ github.event.action }}"
+          git diff --staged --quiet || git commit -m "Update to image ${{ github.event.action }}"
           git push
           
