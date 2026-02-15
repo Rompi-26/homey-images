@@ -1,0 +1,30 @@
+name: Update Image State
+
+on:
+  repository_dispatch:
+    types: [show-image-1, show-image-2]
+
+jobs:
+  update-state:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Update state.txt
+        run: |
+          if [ "${{ github.event.action }}" = "show-image-1" ]; then
+            echo "1" > state.txt
+          elif [ "${{ github.event.action }}" = "show-image-2" ]; then
+            echo "2" > state.txt
+          fi
+          
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add state.txt
+          git commit -m "Update to image ${{ github.event.action }}"
+          git push
+          
